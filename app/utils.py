@@ -28,7 +28,7 @@ def extract_invoice_match(text: str) -> Invoice:
         amount_match = re.search(r"Total: \s*([\d,\.]+)\s*(\w+)?", text)
         received_at_match = re.search(r" Received At: \s*([\w\s\d]+)", text)
         payments_date_match = re.search(r"Please pay this invoice within (\d+) days after the reception date", text)
-        beneficiary_match = re.search(r"ABC Corp | [\w\d\s]+ Corp", text)
+        beneficiary_match = re.search(r"Account #:\s+[A-Za-z0-9]+[\s\n]+([A-Za-z\s]+Corp)", text, re.DOTALL)
 
         received_at = (
             datetime.strptime(received_at_match.group(1), "%d %B %Y")
@@ -43,7 +43,7 @@ def extract_invoice_match(text: str) -> Invoice:
 
         invoice = Invoice(
             reference=reference_match.group(1) if reference_match else None,
-            beneficiary_name=beneficiary_match.group(0) if beneficiary_match else None,
+            beneficiary_name=beneficiary_match.group(1).strip() if beneficiary_match else None,
             account_id=account_id_match.group(1) if account_id_match else None,
             amount=Decimal(amount_match.group(1)) if amount_match else None,
             currency=amount_match.group(2) if amount_match and amount_match.group(2) else None,
