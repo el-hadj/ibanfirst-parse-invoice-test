@@ -9,6 +9,7 @@ services:
     ports:
       - "8080:8000"
     volumes:
-      - ./app:/app/app
-    # environment:
-    #   - OPENAI_API_KEY=sk-proj-...  # Remplacez par votre clé réelle
+      - .:/app
+    env_file:
+      - .env
+
