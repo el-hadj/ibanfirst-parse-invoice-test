@@ -8,4 +8,4 @@ class Invoice(BaseModel):
     account_id: str | None
     amount: Decimal | None
     currency: str | None
-    due_date: str | None
+    due_date: date | None
